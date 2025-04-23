@@ -1,0 +1,87 @@
+[
+  {
+    "projectName": "Quigit - Real-Time Quiz Platform",
+    "rating": 4.8,
+    "deadline": "2025-06-15",
+    "description": "A real-time multiplayer quiz app where players can join using a game pin. Hosts can track results and download reports.",
+    "team": [
+      "Veteran",
+      "Sahil Kumar",
+      "Aryan Phalke"
+    ],
+    "status": "ongoing",
+    "techStack": [
+      "React",
+      "Firebase",
+      "TailwindCSS"
+    ],
+    "projectManager": "Veteran",
+    "createdAt": "2025-03-01T10:30:00Z",
+    "isAssigned": false,
+    "assignedTo": []
+  },
+  {
+    "projectName": "Wel.com - Welder Recruitment Portal",
+    "rating": 4.5,
+    "deadline": "2025-05-30",
+    "description": "Platform that connects welders and recruiters. Includes job postings, profiles, and open-to-work features.",
+    "team": [
+      "Veteran",
+      "Avinash Pauskar",
+      "Harsha Mantri"
+    ],
+    "status": "completed",
+    "techStack": [
+      "React",
+      "Firebase",
+      "MUI"
+    ],
+    "projectManager": "Somling",
+    "createdAt": "2024-12-01T09:00:00Z",
+    "isAssigned": false,
+    "assignedTo": []
+  },
+  {
+    "projectName": "TaskMaster - Console Jira Clone",
+    "rating": 4.2,
+    "deadline": "2025-04-20",
+    "description": "CLI-based task manager with roles like Product Owner, Scrum Master, and Developer. Built using Java.",
+    "team": [
+      "Veteran",
+      "Jatin Gajula",
+      "Parth Belsare"
+    ],
+    "status": "ongoing",
+    "techStack": [
+      "Java"
+    ],
+    "projectManager": "Veteran",
+    "createdAt": "2025-02-18T14:15:00Z",
+    "isAssigned": true,
+    "assignedTo": [
+      "sahil.kumar@esko.com",
+      "avinash.pauskar@esko.com"
+    ]
+  },
+  {
+    "projectName": "SocialSpark - Social Media App",
+    "rating": 4.7,
+    "deadline": "2025-07-10",
+    "description": "A social media platform for team members to post thoughts, like, and comment. Authentication via Firebase.",
+    "team": [
+      "Veteran",
+      "Sugar",
+      "Dhanush"
+    ],
+    "status": "ongoing",
+    "techStack": [
+      "React",
+      "Firebase",
+      "Redux"
+    ],
+    "projectManager": "Veteran",
+    "createdAt": "2025-03-10T12:00:00Z",
+    "isAssigned": true,
+    "assignedTo": []
+  }
+]
