@@ -16,12 +16,12 @@ const dataPath = path.join(__dirname, "..", "data", "data.json");
 // Function to fetch data from MongoDB (using existing Mongoose connection)
 async function getDataFromMongoDB() {
   try {
-    // Check if Mongoose is connected
+
     if (mongoose.connection.readyState !== 1) {
       throw new Error("MongoDB not connected");
     }
 
-    // Fetch data from the "data" collection
+  
     const data = await mongoose.connection.db.collection("data").find({}).toArray();
     return data;
 

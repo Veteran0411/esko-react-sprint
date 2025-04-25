@@ -12,12 +12,15 @@ import TableView from '../table view/TableView';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import NavigationBar from '../navbar/NavigationBar';
+import { useNavigate } from 'react-router-dom';
+
 const Profile = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('all');
   const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'table'
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:5000/api/getDetails')
@@ -90,6 +93,10 @@ const Profile = () => {
     totalPages,
     itemsPerPage
   } = usePagination(filteredProfiles);
+
+  const handleProfileClick = (profile) => {
+    navigate('/profileDetails', { state: { profileData: profile } });
+  };
 
   if (loading) {
     return (
@@ -167,13 +174,16 @@ const Profile = () => {
               margin: '16px',
             }}>
               <Card info={profile.funFact} backName={profile.nickname}>
-                <Box sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '12px',
-                  width: '100%'
-                }}>
+                <Box 
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '12px',
+                    width: '100%'
+                  }}
+                  onClick={() => handleProfileClick(profile)}  // Updated this line
+                >
                   <ProfileImage profile={profile} />
                   <UserProfileData profile={profile} />
                 </Box>

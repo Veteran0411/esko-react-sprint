@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Grid,
   Chip,
   CircularProgress,
   Alert,
@@ -27,7 +26,6 @@ import { Assignment, Star, Person } from '@mui/icons-material';
 import SearchBar from '../search/SearchBar';
 import Pagination from '../pagination/Pagination';
 import { usePagination } from '../custom hooks/usePagination';
-import ViewModuleIcon from '@mui/icons-material/ViewModule';
 
 const ProjectsAssignment = () => {
   const [projects, setProjects] = useState([]);
@@ -38,7 +36,6 @@ const ProjectsAssignment = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [viewMode, setViewMode] = useState('cards'); // 'cards' or 'grid'
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,6 +121,13 @@ const ProjectsAssignment = () => {
     }
   };
 
+  const hasRequiredSkills = (memberSkills, projectTechStack) => {
+    const memberSkillsArray = memberSkills.split(',').map(skill => skill.trim());
+    return projectTechStack.some(tech => 
+      memberSkillsArray.includes(tech)
+    );
+  };
+
   if (loading) return (
     <Box sx={{
       display: 'flex',
@@ -147,218 +151,291 @@ const ProjectsAssignment = () => {
   );
 
   return (
-    <>
+    <Box 
+      sx={{ 
+        background: '#ffffff',
+        minHeight: '100vh',
+        p: 4,
+        transition: 'all 0.3s ease-in-out'
+      }}
+    >
+      <NavigationBar />
+      
+      <Typography
+        variant="h2"
+        sx={{
+          textAlign: 'center',
+          mb: 4,
+          fontWeight: 800,
+          background: 'linear-gradient(45deg, #2196f3 30%, #64b5f6 90%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          position: 'relative',
+          '&:after': {
+            content: '""',
+            display: 'block',
+            width: '100px',
+            height: '4px',
+            background: 'linear-gradient(90deg, #2196f3, #64b5f6)',
+            margin: '16px auto 0',
+            borderRadius: '2px'
+          }
+        }}
+      >
+        Project Assignment
+      </Typography>
+
       <Box sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: '16px',
-        position: 'sticky',
-        top: 0,
-        zIndex: 1000,
-        backgroundColor: 'rgba(245, 245, 245, 0.8)',
-        backdropFilter: 'blur(8px)',
-        gap: '16px'
+        maxWidth: '600px',
+        margin: '0 auto 2rem',
+        background: '#ffffff',
+        borderRadius: '12px',
+        padding: '0.5rem',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)'
       }}>
-        <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <NavigationBar />
+        <SearchBar 
+          searchTerm={searchTerm} 
+          setSearchTerm={setSearchTerm}
+          sx={{
+            '& .MuiInputBase-root': {
+              color: '#333333',
+            }
+          }} 
+        />
       </Box>
 
       <Box sx={{
-        p: 4,
-        minHeight: '100vh',
-        backgroundColor: "rgba(92, 82, 82, 0.11)",
-        backgroundImage: 'linear-gradient(to bottom right, rgba(255,255,255,0.1), rgba(0,0,0,0.05))'
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '2rem',
+        padding: '2rem 0'
       }}>
-        <Typography
-          variant="h3"
-          sx={{
-            mb: 4,
-            fontWeight: 800,
-            textAlign: 'center',
-            background: 'linear-gradient(45deg, #2196f3 30%, #3f51b5 90%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}
-        >
-          Available Projects
-        </Typography>
+        {currentItems.map((project, index) => (
+          <motion.div
+            key={project.id || index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <Card
+              elevation={0}
+              sx={{
+                borderRadius: '16px',
+                background: '#ffffff',
+                transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                overflow: 'hidden',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 25px rgba(0, 0, 0, 0.12)',
+                }
+              }}
+            >
+              <CardContent sx={{ p: 3 }}>
+                <Box sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 2,
+                  mb: 2
+                }}>
+                  <Box sx={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: '12px',
+                    background: 'linear-gradient(135deg, #2196f3 0%, #64b5f6 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    <Assignment sx={{ color: 'white' }} />
+                  </Box>
+                  <Typography variant="h5" sx={{ 
+                    fontWeight: 700,
+                    color: '#1a237e',
+                    fontSize: '1.25rem'
+                  }}>
+                    {project.projectName}
+                  </Typography>
+                </Box>
 
-        {filteredProjects.length === 0 ? (
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
-            <Typography variant="h6" color="text.secondary">
-              No unassigned projects available
-            </Typography>
-          </Box>
-        ) :
-          <Box sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-            padding: '2rem 0px',
-            gap: '20px',
-            width: '100%',
-            margin: '0 auto'
-          }}>
-            {currentItems.map((project, index) => (
-              <motion.div
-                key={project.id || index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <Card
-                  elevation={6}
+                <Typography variant="body2" sx={{ 
+                  color: 'text.secondary',
+                  mb: 2,
+                  lineHeight: 1.6
+                }}>
+                  {project.description}
+                </Typography>
+
+                <Box sx={{ mb: 2 }}>
+                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+                    {project.techStack.map((skill, idx) => (
+                      <Chip
+                        key={idx}
+                        label={skill}
+                        size="small"
+                        sx={{
+                          background: '#f5f5f5',
+                          color: '#2196f3',
+                          fontWeight: 500,
+                          boxShadow: '0 2px 8px rgba(33, 150, 243, 0.1)',
+                          '&:hover': {
+                            transform: 'translateY(-1px)',
+                            boxShadow: '0 4px 12px rgba(33, 150, 243, 0.15)',
+                            background: '#e3f2fd'
+                          }
+                        }}
+                      />
+                    ))}
+                  </Box>
+                </Box>
+
+                <Box sx={{ 
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  mb: 2
+                }}>
+                  <Star sx={{ color: '#ffd700' }} />
+                  <Typography variant="subtitle2">
+                    Required Rating: {project.rating}
+                  </Typography>
+                </Box>
+
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => handleAssignProject(project)}
                   sx={{
-                    width: 300,
-                    borderRadius: '16px',
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    backdropFilter: 'blur(20px)',
-                    transition: 'transform 0.3s ease-in-out',
+                    py: 1.5,
+                    background: 'linear-gradient(45deg, #2196f3 30%, #64b5f6 90%)',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    fontWeight: 600,
+                    textTransform: 'none',
+                    boxShadow: '0 4px 14px rgba(33, 150, 243, 0.2)',
+                    transition: 'all 0.3s ease',
                     '&:hover': {
-                      transform: 'translateY(-5px)'
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 20px rgba(33, 150, 243, 0.3)',
                     }
                   }}
                 >
-                  <CardContent sx={{ p: 3 }}>
-                    <Typography variant="h5" gutterBottom sx={{ fontWeight: 700, color: '#1a237e' }}>
-                      {project.projectName}
-                    </Typography>
+                  Assign Project
+                </Button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </Box>
 
-                    <Typography variant="body1" color="text.secondary" paragraph>
-                      {project.description}
-                    </Typography>
+      <Dialog
+        open={openDialog}
+        onClose={() => {
+          setOpenDialog(false);
+          setSelectedMembers([]);
+        }}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: '16px',
+            background: '#ffffff',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+          }
+        }}
+      >
+        <DialogTitle>
+          Eligible Team Members for {selectedProject?.projectName}
+        </DialogTitle>
+        <DialogContent>
+          <List>
+            {selectedProject && teamMembers
+              .filter(member => 
+                member.rating >= selectedProject.rating && 
+                hasRequiredSkills(member.skills, selectedProject.techStack)
+              )
+              .map((member) => (
+                <ListItem
+                  key={member.email}
+                  secondaryAction={
+                    <Checkbox
+                      edge="end"
+                      onChange={() => handleMemberSelection(member)}
+                      checked={selectedMembers.some(m => m.email === member.email)}
+                    />
+                  }
+                >
+                  <ListItemAvatar>
+                    <Avatar src={member.pic}>
+                      <Person />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={member.name}
+                    secondary={
+                      <>
+                        <Typography component="span" variant="body2">
+                          Rating: {member.rating}
+                        </Typography>
+                        <br />
+                        <Typography component="span" variant="body2">
+                          Skills: {member.skills}
+                        </Typography>
+                        <br />
+                        <Typography component="span" variant="body2" color="textSecondary">
+                          {member.email}
+                        </Typography>
+                      </>
+                    }
+                  />
+                </ListItem>
+              ))}
+          </List>
+          {selectedProject && teamMembers.filter(member => 
+            member.rating >= selectedProject.rating && 
+            hasRequiredSkills(member.skills, selectedProject.techStack)
+          ).length === 0 && (
+            <Box sx={{ textAlign: 'center', mt: 2 }}>
+              <Typography color="error">
+                No eligible members found with required skills and rating
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpenDialog(false);
+              setSelectedMembers([]);
+            }}
+            color="inherit"
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleAssignMembers}
+            variant="contained"
+            disabled={selectedMembers.length === 0}
+            sx={{
+              background: 'linear-gradient(45deg, #2196f3 30%, #64b5f6 90%)',
+              color: 'white'
+            }}
+          >
+            Assign Selected Members
+          </Button>
+        </DialogActions>
+      </Dialog>
 
-                    <Box sx={{ mb: 2 }}>
-                      <Typography variant="subtitle2" color="primary" gutterBottom>
-                        Required Skills:
-                      </Typography>
-                      <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-                        {project.techStack.map((skill, idx) => (
-                          <Chip
-                            key={idx}
-                            label={skill}
-                            size="small"
-                            sx={{
-                              background: 'linear-gradient(45deg, #3f51b5 30%, #2196f3 90%)',
-                              color: 'white'
-                            }}
-                          />
-                        ))}
-                      </Box>
-                    </Box>
-
-                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                      <Star sx={{ color: '#ffc107', mr: 1 }} />
-                      <Typography variant="subtitle2">
-                        Required Rating: {project.rating}
-                      </Typography>
-                    </Box>
-
-                    <Button
-                      variant="contained"
-                      startIcon={<Assignment />}
-                      fullWidth
-                      onClick={() => handleAssignProject(project)}
-                      sx={{
-                        mt: 2,
-                        background: 'linear-gradient(45deg, #2196f3 30%, #3f51b5 90%)',
-                        borderRadius: '8px',
-                        textTransform: 'none'
-                      }}
-                    >
-                      Assign Project
-                    </Button>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </Box>
-        }
-
-        {filteredProjects.length > itemsPerPage && (
+      {filteredProjects.length > itemsPerPage && (
+        <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
             onPageChange={setCurrentPage}
           />
-        )}
-
-        <Dialog
-          open={openDialog}
-          onClose={() => {
-            setOpenDialog(false);
-            setSelectedMembers([]);
-          }}
-          maxWidth="sm"
-          fullWidth
-        >
-          <DialogTitle>
-            Eligible Team Members for {selectedProject?.projectName}
-          </DialogTitle>
-          <DialogContent>
-            <List>
-              {selectedProject && teamMembers
-                .filter(member => member.rating >= selectedProject.rating)
-                .map((member) => (
-                  <ListItem
-                    key={member.email}
-                    secondaryAction={
-                      <Checkbox
-                        edge="end"
-                        onChange={() => handleMemberSelection(member)}
-                        checked={selectedMembers.some(m => m.email === member.email)}
-                      />
-                    }
-                  >
-                    <ListItemAvatar>
-                      <Avatar src={member.pic}>
-                        <Person />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={member.name}
-                      secondary={
-                        <>
-                          <Typography component="span" variant="body2">
-                            Rating: {member.rating}
-                          </Typography>
-                          <br />
-                          <Typography component="span" variant="body2" color="textSecondary">
-                            {member.email}
-                          </Typography>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                ))}
-            </List>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                setOpenDialog(false);
-                setSelectedMembers([]);
-              }}
-              color="inherit"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleAssignMembers}
-              variant="contained"
-              disabled={selectedMembers.length === 0}
-              sx={{
-                background: 'linear-gradient(45deg, #2196f3 30%, #3f51b5 90%)',
-                color: 'white'
-              }}
-            >
-              Assign Selected Members
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
-    </>
+        </Box>
+      )}
+    </Box>
   );
 };
 

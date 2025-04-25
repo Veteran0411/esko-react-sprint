@@ -132,4 +132,62 @@ router.post('/updateAssignments', async (req, res) => {
   }
 });
 
+// Add new project
+router.post('/postProjects', async (req, res) => {
+  try {
+    const newProject = {
+      ...req.body,
+      createdAt: new Date().toISOString(),
+      isAssigned: false,
+      assignedTo: []
+    };
+
+    // Try MongoDB first
+    if (mongoose.connection.readyState === 1) {
+      const result = await mongoose.connection.db.collection("projects")
+        .insertOne(newProject);
+
+      if (result.acknowledged) {
+        console.log("Project added to MongoDB successfully");
+      }
+    }
+
+    // Also update JSON file as fallback
+    try {
+      const rawData = fs.readFileSync(projectsPath, "utf-8");
+      const projects = JSON.parse(rawData);
+      projects.push(newProject);
+      
+      fs.writeFileSync(projectsPath, JSON.stringify(projects, null, 2));
+      console.log("Project added to JSON file successfully");
+
+      res.status(201).json({
+        success: true,
+        message: 'Project added successfully',
+        project: newProject
+      });
+    } catch (fileError) {
+      console.error("Error updating JSON file:", fileError);
+      // If MongoDB was successful, still return success
+      if (mongoose.connection.readyState === 1) {
+        res.status(201).json({
+          success: true,
+          message: 'Project added to MongoDB only',
+          project: newProject
+        });
+      } else {
+        throw fileError;
+      }
+    }
+
+  } catch (error) {
+    console.error('Error adding new project:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to add new project',
+      error: error.message
+    });
+  }
+});
+
 export default router;

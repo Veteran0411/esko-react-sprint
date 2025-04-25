@@ -38,8 +38,11 @@
     ],
     "projectManager": "Somling",
     "createdAt": "2024-12-01T09:00:00Z",
-    "isAssigned": false,
-    "assignedTo": []
+    "isAssigned": true,
+    "assignedTo": [
+      "somling.hajji@esko.com",
+      "sahil.kumar@esko.com"
+    ]
   },
   {
     "projectName": "TaskMaster - Console Jira Clone",
@@ -83,5 +86,38 @@
     "createdAt": "2025-03-10T12:00:00Z",
     "isAssigned": true,
     "assignedTo": []
+  },
+  {
+    "projectName": "test",
+    "rating": "4",
+    "deadline": "2025-04-30",
+    "description": "test desc",
+    "team": [],
+    "status": "pending",
+    "techStack": [
+      "Node.js"
+    ],
+    "projectManager": "somling",
+    "isAssigned": false,
+    "assignedTo": [],
+    "createdAt": "2025-04-24T10:50:35.647Z",
+    "_id": "680a177b461aef3807092236"
+  },
+  {
+    "projectName": "another project test",
+    "rating": "3.5",
+    "deadline": "2025-04-30",
+    "description": "another test",
+    "team": [],
+    "status": "pending",
+    "techStack": [
+      "Firebase",
+      "Python"
+    ],
+    "projectManager": "somling",
+    "isAssigned": false,
+    "assignedTo": [],
+    "createdAt": "2025-04-24T10:58:26.511Z",
+    "_id": "680a1952354f72c56dadeafa"
   }
 ]
