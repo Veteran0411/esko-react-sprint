@@ -26,6 +26,7 @@ const Profile = () => {
     axios.get('http://localhost:5000/api/getDetails')
       .then((res) => {
         setProfiles(res.data);
+        console.log('Profiles fetched:', res.data);
         setLoading(false);
       })
       .catch((err) => {

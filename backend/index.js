@@ -3,9 +3,11 @@ import cors from "cors";
 import  getDetailsRoutes from "./routes/getDetails.js"
 import postDetailsRoutes from "./routes/form/postDetails.js"
 import getProjectsRoutes from "./routes/project/project.js";
+import adminRoutes from "./routes/adminRoutes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import connectDB from "./db/connect.js";
+import profileRoutes from "./routes/profileRoutes.js"; 
 
 const app = express();
 
@@ -18,6 +20,8 @@ app.use(express.json());
 app.use("/api/getDetails", getDetailsRoutes);
 app.use("/api/postDetails",postDetailsRoutes);
 app.use("/api/projects",getProjectsRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/profiles", profileRoutes); // Add this route
 
 // when we work with es6 we have to get dirname like this
 //  (import meta url) file:///C:/Users/soha/IdeaProjects/react%20sprint/project/backend/index.js

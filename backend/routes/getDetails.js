@@ -1,8 +1,8 @@
 import express from "express";
+import { getAllProfiles } from "../controllers/profileController.js";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import mongoose from "mongoose"; // Reuse Mongoose connection
 
 const router = express.Router();
 
@@ -12,24 +12,6 @@ const __dirname = path.dirname(__filename);
 
 // Path to local JSON fallback
 const dataPath = path.join(__dirname, "..", "data", "data.json");
-
-// Function to fetch data from MongoDB (using existing Mongoose connection)
-async function getDataFromMongoDB() {
-  try {
-
-    if (mongoose.connection.readyState !== 1) {
-      throw new Error("MongoDB not connected");
-    }
-
-  
-    const data = await mongoose.connection.db.collection("data").find({}).toArray();
-    return data;
-
-  } catch (error) {
-    console.error("Error fetching from MongoDB:", error);
-    throw error;
-  }
-}
 
 // Function to fetch data from local JSON (fallback)
 function getDataFromLocalFile() {
@@ -46,10 +28,8 @@ function getDataFromLocalFile() {
 // Route handler (try MongoDB first, fallback to JSON)
 router.get("/", async (req, res) => {
   try {
-    const mongoData = await getDataFromMongoDB();
-    console.log("MongoDB data fetched successfully.");
-    console.log("MongoDB data:", mongoData); // Log the fetched data
-    res.json(mongoData);
+    // First try to get data from MongoDB using the controller
+    await getAllProfiles(req, res);
   } catch (mongoError) {
     console.log("Falling back to local JSON file...");
     try {
@@ -62,7 +42,7 @@ router.get("/", async (req, res) => {
         details: {
           mongoError: mongoError.message,
           fileError: fileError.message,
-          expectedPath: path.normalize("C:/Users/soha/IdeaProjects/react sprint/project/backend/data/data.json")
+          expectedPath: path.normalize(dataPath)
         }
       });
     }

@@ -209,6 +209,48 @@ const Dashboard = () => {
           </motion.div>
         </Box>
 
+        {/* Add this new Box component for displaying total interns and unique tech stack */}
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: 4,
+          mb: 6
+        }}>
+          <Card sx={{
+            borderRadius: '16px',
+            background: 'linear-gradient(135deg, #3f51b5 0%, #2196f3 100%)',
+            width: '200px',
+            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.15)',
+          }}>
+            <CardContent sx={{ p: 2, textAlign: 'center' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
+                Total Members
+              </Typography>
+              <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                {teamData.length}
+              </Typography>
+            </CardContent>
+          </Card>
+
+          <Card sx={{
+            borderRadius: '16px',
+            background: 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)',
+            width: '200px',
+            boxShadow: '0 8px 32px rgba(31, 38, 135, 0.15)',
+          }}>
+            <CardContent sx={{ p: 1, textAlign: 'center' }}>
+              <Typography variant="h6" sx={{ color: 'white', mb: 1 }}>
+                Unique Tech Stack
+              </Typography>
+              <Typography variant="h4" sx={{ color: 'white', fontWeight: 'bold' }}>
+                {new Set(teamData.flatMap(member => 
+                  member.skills.split(',').map(skill => skill.trim())
+                )).size}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+
         {/* Main Content */}
         <Grid container spacing={4}>
           {/* Skills Distribution */}

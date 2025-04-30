@@ -1,9 +1,9 @@
 import express from 'express';
-import fs from 'fs';
+import multer from 'multer';
+import { createProfile } from '../../controllers/profileController.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import multer from 'multer';
-import mongoose from "mongoose";   // Import the existing connection
+import fs from 'fs';
 
 const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -31,13 +31,13 @@ const dataPath = path.join(__dirname, '..', '..', 'data', 'data.json');
 
 router.post('/', upload.single('pic'), async (req, res) => {
   try {
-    console.log("Attempting to write to:", dataPath);
+    // First try to save to MongoDB using the controller
+    await createProfile(req, res);
     
-    // Read existing data
+    // Then also save to local JSON file (optional, for fallback)
     const rawData = fs.readFileSync(dataPath, 'utf-8');
     const existingData = JSON.parse(rawData);
-
-    // Create new entry
+    
     const newEntry = {
       name: req.body.name,
       email: req.body.email,
@@ -46,34 +46,21 @@ router.post('/', upload.single('pic'), async (req, res) => {
       funFact: req.body.funFact,
       joiningDate: req.body.joiningDate,
       pic: req.file ? `http://localhost:5000/uploads/${req.file.filename}` : "http://localhost:5000/uploads/default.jpg",
-      skills: req.body.skills || "React, Node.js", // Use submitted skills or default
+      skills: req.body.skills || "React, Node.js",
       nickname: "Newbie",
       rating: 3.5,
       role: "Intern"
     };
 
-    // Add to MongoDB
-    const db = await mongoose.connection.db.collection('data').insertOne(newEntry);
-
-    console.log("MongoDB data inserted successfully:", db);
-    // Keep existing JSON file logic
     const updatedData = [...existingData, newEntry];
     fs.writeFileSync(dataPath, JSON.stringify(updatedData, null, 2));
     console.log("Successfully wrote to:", dataPath);
-
-    res.status(201).json({
-      success: true,
-      message: 'Data added successfully to MongoDB and JSON file',
-      data: newEntry,
-      filePath: dataPath
-    });
   } catch (error) {
-    console.error('Error updating data:', error);
+    console.error('Error in post route:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update data',
-      error: error.message,
-      attemptedPath: dataPath
+      message: 'Failed to process request',
+      error: error.message
     });
   }
 });

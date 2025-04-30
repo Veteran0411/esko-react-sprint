@@ -17,8 +17,10 @@
     ],
     "projectManager": "Veteran",
     "createdAt": "2025-03-01T10:30:00Z",
-    "isAssigned": false,
-    "assignedTo": []
+    "isAssigned": true,
+    "assignedTo": [
+      "somling.hajji@esko.com"
+    ]
   },
   {
     "projectName": "Wel.com - Welder Recruitment Portal",
@@ -62,7 +64,6 @@
     "createdAt": "2025-02-18T14:15:00Z",
     "isAssigned": true,
     "assignedTo": [
-      "sahil.kumar@esko.com",
       "avinash.pauskar@esko.com"
     ]
   },
@@ -98,8 +99,10 @@
       "Node.js"
     ],
     "projectManager": "somling",
-    "isAssigned": false,
-    "assignedTo": [],
+    "isAssigned": true,
+    "assignedTo": [
+      "harshavardhan.mantri@esko.com"
+    ],
     "createdAt": "2025-04-24T10:50:35.647Z",
     "_id": "680a177b461aef3807092236"
   },
@@ -115,9 +118,51 @@
       "Python"
     ],
     "projectManager": "somling",
-    "isAssigned": false,
-    "assignedTo": [],
+    "isAssigned": true,
+    "assignedTo": [
+      "jatin.gajula@esko.com"
+    ],
     "createdAt": "2025-04-24T10:58:26.511Z",
     "_id": "680a1952354f72c56dadeafa"
+  },
+  {
+    "projectName": "test 3",
+    "rating": "4",
+    "deadline": "2025-05-03",
+    "description": "test 3",
+    "team": [],
+    "status": "ongoing",
+    "techStack": [
+      "Python"
+    ],
+    "projectManager": "somling",
+    "isAssigned": true,
+    "assignedTo": [
+      "jatin.gajula@esko.com"
+    ],
+    "createdAt": "2025-04-29T07:02:39.090Z",
+    "_id": "6810798f214f0207f365f9cc"
+  },
+  {
+    "projectName": "react sprint",
+    "rating": 2.5,
+    "deadline": "2025-05-30",
+    "description": "make project interface cooler",
+    "team": [],
+    "status": "ongoing",
+    "techStack": [
+      "Firebase",
+      "Python",
+      "Node.js",
+      "React"
+    ],
+    "projectManager": "somling",
+    "createdAt": "2025-04-30T13:51:49.140Z",
+    "isAssigned": true,
+    "assignedTo": [
+      "dhanush.np@esko.com"
+    ],
+    "_id": "68122af5079775a7309055e2",
+    "__v": 0
   }
 ]

@@ -129,5 +129,32 @@
     "rating": 3.5,
     "role": "Intern",
     "_id": "68090a816c35f80b9bc13d62"
+  },
+  {
+    "name": "sugar",
+    "email": "hel@gmail.com",
+    "address": "Chavat galli",
+    "phoneNo": "8310306752",
+    "funFact": "good at everything",
+    "joiningDate": "2025-04-29",
+    "pic": "http://localhost:5000/uploads/pic-1745910107448-248904287.jfif",
+    "skills": "Python",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern",
+    "_id": "6810795b0dc2e8e4c0e65932"
+  },
+  {
+    "name": "harsh esko",
+    "email": "harsh@gmail.com",
+    "address": "kalburgi",
+    "phoneNo": "8899776655",
+    "funFact": "hjahfahfh",
+    "joiningDate": "2025-04-29",
+    "pic": "http://localhost:5000/uploads/pic-1745915980921-608868005.jpeg",
+    "skills": "Python, Node.js",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern"
   }
 ]

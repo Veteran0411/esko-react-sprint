@@ -28,6 +28,7 @@ const pulseAnimation = keyframes`
 export default function NavigationBar() {
   const [state, setState] = React.useState({ left: false });
   const navigate = useNavigate();
+  const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -41,19 +42,23 @@ export default function NavigationBar() {
 
   const handleSignOut = async () => {
     try {
-      navigate("/");
+      // Clear all items from localStorage
+      localStorage.clear();
+      // Navigate to login page
+      navigate("/dashboard");
     } catch (error) {
       console.error("Error signing out:", error);
     }
   };
 
   const navLinks = [
-      { text: "Dashboard", path: "/dashboard", icon: <Dashboard /> },
-      { text: "View all interns", path: "/viewAllIntern", icon: <Groups /> },
-      { text: "Add intern", path: "/form", icon: <GroupAdd /> },
-    { text: "Poll Vote", path: "/pollVote", icon: <Poll /> },
-    { text: "Create project", path: "/createProject", icon: <Poll /> },
-    { text: "Available project", path: "/projectAssignment", icon: <Poll /> },
+    { text: "Dashboard", path: "/dashboard", icon: <Dashboard />, adminOnly: false },
+    { text: "View all interns", path: "/viewAllIntern", icon: <Groups />, adminOnly: false },
+    { text: "Add intern", path: "/form", icon: <GroupAdd />, adminOnly: true },
+    // { text: "Poll Vote", path: "/pollVote", icon: <Poll />, adminOnly: false },
+    { text: "Create project", path: "/createProject", icon: <Poll />, adminOnly: true },
+    { text: "Available project", path: "/projectAssignment", icon: <Poll />, adminOnly: true },
+    { text: "Drag and Drop project", path: "/projectsDragAssign", icon: <Poll />, adminOnly: true },
   ];
 
   const list = (
@@ -70,22 +75,24 @@ export default function NavigationBar() {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
+        {navLinks
+          .filter(link => !link.adminOnly || isAdmin)
+          .map((link) => (
+            <ListItem key={link.text} disablePadding>
+              <ListItemButton component={Link} to={link.path}>
+                <ListItemIcon sx={{ color: "white" }}>{link.icon}</ListItemIcon>
+                <ListItemText primary={link.text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
         
-        {navLinks.map((link) => (
-          <ListItem key={link.text} disablePadding>
-            <ListItemButton component={Link} to={link.path}>
-              <ListItemIcon sx={{ color: "white" }}>{link.icon}</ListItemIcon>
-              <ListItemText primary={link.text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-        
-        <ListItem disablePadding>
+        {isAdmin && <ListItem disablePadding>
           <ListItemButton onClick={handleSignOut}>
             <ListItemIcon sx={{ color: "white" }}><ExitToApp /></ListItemIcon>
             <ListItemText primary="Sign Out" />
           </ListItemButton>
         </ListItem>
+      }
       </List>
     </Box>
   );

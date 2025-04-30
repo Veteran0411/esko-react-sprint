@@ -50,7 +50,12 @@ const ProjectsDragAssign = () => {
           axios.get('http://localhost:5000/api/getDetails')
         ]);
 
-        setProjects(projectsResponse.data.filter(p => !p.isAssigned));
+        // Filter out completed and already assigned projects
+        const availableProjects = projectsResponse.data.filter(p => 
+          !p.isAssigned && p.status !== 'completed'
+        );
+        
+        setProjects(availableProjects);
         setTeamMembers(membersResponse.data);
         setLoading(false);
       } catch (err) {
@@ -97,7 +102,7 @@ const ProjectsDragAssign = () => {
   const handleAssign = async () => {
     try {
       if (assignments.length === 0) {
-        // Auto-assign logic
+        // Auto-assign logic remains the same
         const autoAssignments = [];
         const assignedMembers = new Set();
 
@@ -123,26 +128,35 @@ const ProjectsDragAssign = () => {
 
         setAssignments(autoAssignments);
       } else {
-        // Manual assignment logic
-        const projectAssignments = assignments.filter(item => item.type === 'project');
-        const memberAssignments = assignments.filter(item => item.type === 'member');
-
-        // Make API call to update assignments
-        await axios.post('http://localhost:5000/api/projects/updateAssignments', {
-          assignments: projectAssignments.map(project => ({
+        // Format assignments to match ProjectsAssignment.jsx
+        const projectAssignments = assignments
+          .filter(item => item.type === 'project')
+          .map(project => ({
             projectName: project.projectName,
-            assignedEmails: memberAssignments.map(m => m.email)
-          }))
-        });
+            assignedEmails: assignments
+              .filter(item => item.type === 'member')
+              .map(member => member.email)
+          }));
 
+        // Make the API call
+        for (const assignment of projectAssignments) {
+          await axios.post('http://localhost:5000/api/projects/updateAssignments', {
+            projectName: assignment.projectName,
+            assignedEmails: assignment.assignedEmails
+          });
+        }
+
+        // Clear assignments and refresh projects list
         setAssignments([]);
-        // Refresh projects list
         const response = await axios.get('http://localhost:5000/api/projects/getProjects');
-        setProjects(response.data.filter(p => !p.isAssigned));
+        const updatedProjects = response.data.filter(p => 
+          !p.isAssigned && p.status !== 'completed'
+        );
+        setProjects(updatedProjects);
       }
     } catch (error) {
       console.error('Error making assignments:', error);
-      // Add error handling UI feedback here
+      // Add error UI feedback here if needed
     }
   };
 

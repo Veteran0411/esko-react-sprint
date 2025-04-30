@@ -10,10 +10,16 @@ import {
     Avatar,
     Rating,
     Divider,
-    CircularProgress
+    CircularProgress,
+    Button,
+    TextField,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions
 } from '@mui/material';
 import axios from 'axios';
-import { Email, Phone, LocationOn, CalendarToday, Star, Schedule, Group, Code } from '@mui/icons-material';
+import { Email, Phone, LocationOn, CalendarToday, Star, Schedule, Group, Code, Edit } from '@mui/icons-material';
 
 const THEME_COLORS = {
     primary: '#3498db',
@@ -34,6 +40,9 @@ const ViewProfile = () => {
     const [projects, setProjects] = useState([]);
     const [visibleProjects, setVisibleProjects] = useState(1); // Start with 1 projects
     const loaderRef = useRef(null);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editedProfile, setEditedProfile] = useState({});
+    const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -41,10 +50,9 @@ const ViewProfile = () => {
                 const response = await axios.get('http://localhost:5000/api/projects/getProjects');
                 console.log('Fetched Projects:', response.data);
                 const allProjects = response.data;
-                // Filter projects where this profile is involved
+                // Filter projects where this profile's email is in assignedTo array
                 const userProjects = allProjects.filter(project =>
-                    project.team.includes(profile.name) ||
-                    project.assignedTo.includes(profile.email)
+                    project.assignedTo && project.assignedTo.includes(profile.email)
                 );
                 setProjects(userProjects);
             } catch (error) {
@@ -85,8 +93,39 @@ const ViewProfile = () => {
         return <Typography>No profile data available</Typography>;
     }
 
+    const handleDeleteIntern = async (id) => {
+        console.log("Deleting intern with ID:", id);
+    }
+
     // Get only the projects to display
     const projectsToShow = projects.slice(0, visibleProjects);
+
+    // Add this function to handle edit mode
+    const handleEditClick = () => {
+        setEditedProfile({
+            name: profile.name,
+            email: profile.email,
+            rating: profile.rating,
+            phoneNo: profile.phoneNo,
+            address: profile.address
+        });
+        setIsEditMode(true);
+    };
+
+    // Add this function to handle profile updates
+    const handleProfileUpdate = async () => {
+        try {
+            const response = await axios.put('http://localhost:5000/api/profiles/updateProfile', editedProfile);
+            
+            if (response.data.success) {
+                // Update local profile data
+                Object.assign(profile, editedProfile);
+                setIsEditMode(false);
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+        }
+    };
 
     return (
         <Box sx={{
@@ -119,24 +158,119 @@ const ViewProfile = () => {
                                 boxShadow: '0 8px 24px rgba(0,0,0,0.12)'
                             }}
                         />
-                        <Typography variant="h4" sx={{ mt: 2, fontWeight: 700 }}>
+                        
+                        {/* Name and Role Section */}
+                        <Typography variant="h5" sx={{ mt: 2, fontWeight: 600 }}>
                             {profile.name}
                         </Typography>
-                        <Chip
-                            label={profile.role}
-                            sx={{
-                                mt: 1,
-                                background: 'linear-gradient(45deg, #3498db 0%, #9b59b6 100%)',
-                                color: 'white',
-                                fontWeight: 600
-                            }}
-                        />
+                        
+                        <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center', gap: 1 }}>
+                            <Chip
+                                label={profile.role}
+                                sx={{
+                                    background: 'linear-gradient(45deg, #3498db 0%, #9b59b6 100%)',
+                                    color: 'white',
+                                    fontWeight: 600
+                                }}
+                            />
+                            {isAdmin && (
+                                <>
+                                    <Chip
+                                        icon={<Edit sx={{ color: 'white !important' }} />}
+                                        label="Edit"
+                                        onClick={handleEditClick}
+                                        sx={{
+                                            background: 'linear-gradient(45deg, #2196f3 0%, #3f51b5 100%)',
+                                            color: 'white',
+                                            fontWeight: 600,
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                background: 'linear-gradient(45deg, #1976d2 0%, #283593 100%)',
+                                            }
+                                        }}
+                                    />
+                                    <Chip
+                                        label="Delete"
+                                        onClick={() => handleDeleteIntern(profile.id)}
+                                        sx={{
+                                            background: 'linear-gradient(45deg, #e74c3c 0%, #c0392b 100%)',
+                                            color: 'white',
+                                            fontWeight: 600,
+                                            cursor: 'pointer',
+                                            '&:hover': {
+                                                background: 'linear-gradient(45deg, #c0392b 0%, #a93226 100%)',
+                                            }
+                                        }}
+                                    />
+                                </>
+                            )}
+                        </Box>
+
                         <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
                             <Rating value={profile.rating} precision={0.1} readOnly />
                             <Typography variant="body2" sx={{ fontWeight: 600, color: '#666' }}>
                                 ({profile.rating})
                             </Typography>
                         </Box>
+
+                        {/* Keep the existing Dialog component */}
+                        <Dialog open={isEditMode} onClose={() => setIsEditMode(false)}>
+                            <DialogTitle>Edit Profile</DialogTitle>
+                            <DialogContent>
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+                                    <TextField
+                                        label="Name"
+                                        value={editedProfile.name || ''}
+                                        onChange={(e) => setEditedProfile(prev => ({ ...prev, name: e.target.value }))}
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        label="Email"
+                                        value={editedProfile.email || ''}
+                                        onChange={(e) => setEditedProfile(prev => ({ ...prev, email: e.target.value }))}
+                                        fullWidth
+                                        disabled
+                                    />
+                                    <TextField
+                                        label="Rating"
+                                        type="number"
+                                        value={editedProfile.rating || ''}
+                                        onChange={(e) => setEditedProfile(prev => ({ ...prev, rating: parseFloat(e.target.value) }))}
+                                        inputProps={{ min: 0, max: 5, step: 0.1 }}
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        label="Phone Number"
+                                        value={editedProfile.phoneNo || ''}
+                                        onChange={(e) => setEditedProfile(prev => ({ ...prev, phoneNo: e.target.value }))}
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        label="Address"
+                                        value={editedProfile.address || ''}
+                                        onChange={(e) => setEditedProfile(prev => ({ ...prev, address: e.target.value }))}
+                                        fullWidth
+                                        multiline
+                                        rows={2}
+                                    />
+                                </Box>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={() => setIsEditMode(false)}>Cancel</Button>
+                                <Button 
+                                    onClick={handleProfileUpdate}
+                                    sx={{
+                                        background: 'linear-gradient(45deg, #3498db 30%, #2980b9 90%)',
+                                        color: 'white',
+                                        '&:hover': {
+                                            background: 'linear-gradient(45deg, #2980b9 30%, #2574a9 90%)',
+                                        }
+                                    }}
+                                >
+                                    Save Changes
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
                     </Box>
 
                     <Divider sx={{ my: 3 }} />
