@@ -21,6 +21,9 @@ import {
 import axios from 'axios';
 import { Email, Phone, LocationOn, CalendarToday, Star, Schedule, Group, Code, Edit } from '@mui/icons-material';
 import { toast } from 'react-toastify';
+// Add this at the top of your component (with other imports)
+import { useTheme, useMediaQuery } from '@mui/material';
+import NavigationBar from "../navbar/NavigationBar"
 
 const THEME_COLORS = {
     primary: '#3498db',
@@ -45,6 +48,10 @@ const ViewProfile = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [editedProfile, setEditedProfile] = useState({});
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+    // Inside your ViewProfile component, add this before the return statement:
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -100,7 +107,7 @@ const ViewProfile = () => {
             try {
                 console.log('Deleting intern with ID:', id);
                 const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/profiles/deleteProfile/${id}`);
-                
+
                 if (response.data.success) {
                     toast.success('🗑️ Intern deleted successfully', {
                         position: "top-right",
@@ -140,7 +147,7 @@ const ViewProfile = () => {
     const handleProfileUpdate = async () => {
         try {
             const response = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/profiles/updateProfile`, editedProfile);
-            
+
             if (response.data.success) {
                 // Update local profile data
                 Object.assign(profile, editedProfile);
@@ -158,15 +165,17 @@ const ViewProfile = () => {
             minHeight: '100vh',
             background: 'linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%)',
             display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row', // Stack on mobile, row on desktop
             gap: 3,
             p: 3
         }}>
+        <NavigationBar/>
             {/* Left Section - Profile Details */}
             <Card sx={{
-                width: '30%',
+                width: isMobile ? '100%' : '30%', // Full width on mobile, 30% on desktop
                 height: 'fit-content',
                 borderRadius: '20px',
-                position: 'sticky',
+                position: isMobile ? 'static' : 'sticky', // Remove sticky on mobile
                 top: '20px',
                 boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
                 background: 'rgba(255,255,255,0.9)',
@@ -184,12 +193,12 @@ const ViewProfile = () => {
                                 boxShadow: '0 8px 24px rgba(0,0,0,0.12)'
                             }}
                         />
-                        
+
                         {/* Name and Role Section */}
                         <Typography variant="h5" sx={{ mt: 2, fontWeight: 600 }}>
                             {profile.name}
                         </Typography>
-                        
+
                         <Box sx={{ mt: 1, display: 'flex', justifyContent: 'center', gap: 1 }}>
                             <Chip
                                 label={profile.role}
@@ -283,7 +292,7 @@ const ViewProfile = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={() => setIsEditMode(false)}>Cancel</Button>
-                                <Button 
+                                <Button
                                     onClick={handleProfileUpdate}
                                     sx={{
                                         background: 'linear-gradient(45deg, #3498db 30%, #2980b9 90%)',
@@ -358,10 +367,10 @@ const ViewProfile = () => {
 
             {/* Right Section - Projects */}
             <Box sx={{
-                width: '70%',
-                maxHeight: '100vh',
-                overflowY: 'auto',
-                pr: 2,
+                width: isMobile ? '100%' : '70%', // Full width on mobile, 70% on desktop
+                maxHeight: isMobile ? 'none' : '100vh', // Remove max-height on mobile
+                overflowY: isMobile ? 'visible' : 'auto', // Remove scrolling on mobile
+                pr: isMobile ? 0 : 2, // Remove right padding on mobile
                 '&::-webkit-scrollbar': {
                     width: '6px'
                 },
@@ -403,7 +412,7 @@ const ViewProfile = () => {
                             zIndex: 1,
                             boxShadow: '0 4px 15px rgba(52, 152, 219, 0.3)',
                             transition: 'all 0.3s ease',
-                            '&:hover': {    
+                            '&:hover': {
                                 transform: 'translateY(-2px)',
                                 boxShadow: '0 6px 20px rgba(155, 89, 182, 0.4)'
                             }
@@ -549,7 +558,7 @@ const ViewProfile = () => {
                                         borderRadius: '12px',
                                         mt: 2,
                                         px: 2
-                                        }}>
+                                    }}>
                                         <Box sx={{ py: 2 }}>
                                             <Typography variant="subtitle2" sx={{
                                                 color: '#000000',
@@ -595,19 +604,19 @@ const ViewProfile = () => {
                     {/* Loading indicator */}
                     {visibleProjects < projects.length && (
                         <Grid item xs={12} ref={loaderRef}>
-                            <Box sx={{ 
-                                display: 'flex', 
-                                justifyContent: 'center', 
+                            <Box sx={{
+                                display: 'flex',
+                                justifyContent: 'center',
                                 py: 3,
                                 opacity: 0.7
                             }}>
-                                <CircularProgress 
-                                    sx={{ 
+                                <CircularProgress
+                                    sx={{
                                         color: THEME_COLORS.gradient.start,
                                         '& .MuiCircularProgress-circle': {
                                             strokeLinecap: 'round'
                                         }
-                                    }} 
+                                    }}
                                 />
                             </Box>
                         </Grid>
