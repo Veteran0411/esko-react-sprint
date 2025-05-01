@@ -1,6 +1,7 @@
 import Profile from "../models/Profile.js";
 import fs from 'fs';
 import path from 'path';
+import mongoose from 'mongoose';
 
 // Get all profiles
 export const getAllProfiles = async (req, res) => {
@@ -124,6 +125,51 @@ export const updateProfile = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to update profile',
+      error: error.message
+    });
+  }
+};
+
+export const deleteProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log('Attempting to delete profile with ID:', id);
+
+    // Check if ID is valid MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid profile ID format'
+      });
+    }
+
+    const deletedProfile = await Profile.findByIdAndDelete(id);
+    console.log('Delete operation result:', deletedProfile); // Debug log
+
+    if (!deletedProfile) {
+      console.log('Profile not found for deletion');
+      return res.status(404).json({
+        success: false,
+        message: 'Profile not found'
+      });
+    }
+
+    console.log('Profile deleted successfully');
+    res.status(200).json({
+      success: true,
+      message: 'Profile deleted successfully',
+      profile: {
+        id: deletedProfile._id,
+        name: deletedProfile.name,
+        email: deletedProfile.email
+      }
+    });
+
+  } catch (error) {
+    console.error('Error in deleteProfile:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete profile',
       error: error.message
     });
   }

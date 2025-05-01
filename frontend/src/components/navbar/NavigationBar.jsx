@@ -57,7 +57,7 @@ export default function NavigationBar() {
     { text: "Add intern", path: "/form", icon: <GroupAdd />, adminOnly: true },
     // { text: "Poll Vote", path: "/pollVote", icon: <Poll />, adminOnly: false },
     { text: "Create project", path: "/createProject", icon: <Poll />, adminOnly: true },
-    { text: "Available project", path: "/projectAssignment", icon: <Poll />, adminOnly: true },
+    { text: "Assign project", path: "/projectAssignment", icon: <Poll />, adminOnly: true },
     { text: "Drag and Drop project", path: "/projectsDragAssign", icon: <Poll />, adminOnly: true },
   ];
 

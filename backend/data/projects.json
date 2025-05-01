@@ -164,5 +164,70 @@
     ],
     "_id": "68122af5079775a7309055e2",
     "__v": 0
+  },
+  {
+    "projectName": "user management portal",
+    "rating": 3,
+    "deadline": "2025-05-31",
+    "description": "create a user management portal",
+    "team": [
+      "somling.hajji@esko.com"
+    ],
+    "status": "pending",
+    "techStack": [
+      "Python",
+      "React"
+    ],
+    "projectManager": "somling",
+    "createdAt": "2025-05-01T06:33:11.331Z",
+    "isAssigned": true,
+    "assignedTo": [
+      "dhanush.np@gmail.com"
+    ],
+    "_id": "681315a73789b719335685c3",
+    "__v": 0
+  },
+  {
+    "projectName": "spring boot project",
+    "rating": 2.5,
+    "deadline": "2025-05-24",
+    "description": "full stack project",
+    "team": [
+      "somling.hajji@esko.com"
+    ],
+    "status": "pending",
+    "techStack": [
+      "Java"
+    ],
+    "projectManager": "somling",
+    "createdAt": "2025-05-01T07:12:33.561Z",
+    "isAssigned": true,
+    "assignedTo": [
+      "sahil.kumar@esko.com"
+    ],
+    "_id": "68131ee127f10cfc7ca13d96",
+    "__v": 0
+  },
+  {
+    "projectName": "library management",
+    "rating": 3,
+    "deadline": "2025-05-31",
+    "description": "full stack application",
+    "team": [],
+    "status": "pending",
+    "techStack": [
+      "Python",
+      "React",
+      "MongoDB",
+      "Node.js"
+    ],
+    "projectManager": "somling",
+    "createdAt": "2025-05-01T08:26:14.417Z",
+    "isAssigned": true,
+    "assignedTo": [
+      "aryan.phalke@esko.com"
+    ],
+    "_id": "68133026e94d241f806b5e17",
+    "__v": 0
   }
 ]

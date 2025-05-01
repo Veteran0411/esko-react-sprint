@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
     Box,
     Typography,
@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { Email, Phone, LocationOn, CalendarToday, Star, Schedule, Group, Code, Edit } from '@mui/icons-material';
+import { toast } from 'react-toastify';
 
 const THEME_COLORS = {
     primary: '#3498db',
@@ -36,6 +37,7 @@ const THEME_COLORS = {
 
 const ViewProfile = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const profile = location.state?.profileData;
     const [projects, setProjects] = useState([]);
     const [visibleProjects, setVisibleProjects] = useState(1); // Start with 1 projects
@@ -94,8 +96,30 @@ const ViewProfile = () => {
     }
 
     const handleDeleteIntern = async (id) => {
-        console.log("Deleting intern with ID:", id);
-    }
+        if (window.confirm('Are you sure you want to delete this intern?')) {
+            try {
+                console.log('Deleting intern with ID:', id);
+                const response = await axios.delete(`http://localhost:5000/api/profiles/deleteProfile/${id}`);
+                
+                if (response.data.success) {
+                    toast.success('🗑️ Intern deleted successfully', {
+                        position: "top-right",
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true
+                    });
+                    navigate('/viewAllIntern', { replace: true });
+                } else {
+                    toast.error(response.data.message || 'Failed to delete intern');
+                }
+            } catch (error) {
+                console.error('Error deleting intern:', error);
+                toast.error(error.response?.data?.message || 'Error occurred while deleting intern');
+            }
+        }
+    };
 
     // Get only the projects to display
     const projectsToShow = projects.slice(0, visibleProjects);
@@ -121,9 +145,11 @@ const ViewProfile = () => {
                 // Update local profile data
                 Object.assign(profile, editedProfile);
                 setIsEditMode(false);
+                toast.success('✨ Profile updated successfully');
             }
         } catch (error) {
             console.error('Error updating profile:', error);
+            toast.error('Failed to update profile: ' + (error.response?.data?.message || error.message));
         }
     };
 

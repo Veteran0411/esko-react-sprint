@@ -13,10 +13,24 @@ import ProjectsDragAssign from './components/projects/ProjectsDragAssign.jsx'
 import ProjectForm from './components/projects/ProjectForm.jsx'
 import ViewProfile from './components/profile/ViewProfile.jsx'
 import Login from './components/login/Login.jsx'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
     <BrowserRouter>
+    <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     <Routes>
       <Route path='/' element={<Dashboard />}/>
       <Route path='/viewAllIntern' element={<Profile />}/>

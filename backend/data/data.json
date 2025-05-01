@@ -156,5 +156,70 @@
     "nickname": "Newbie",
     "rating": 3.5,
     "role": "Intern"
+  },
+  {
+    "name": "dhanush np",
+    "email": "dhanush.np@esko.com",
+    "address": "Coimbatore",
+    "phoneNo": "9988776655",
+    "funFact": "likes to play tt",
+    "joiningDate": "2025-05-01",
+    "pic": "http://localhost:5000/uploads/pic-1746080503836-629659810.png",
+    "skills": "Python",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern"
+  },
+  {
+    "name": "dhanush np",
+    "email": "dhanush.np@esko.com",
+    "address": "Coimbatore",
+    "phoneNo": "8310306752",
+    "funFact": "Plays table tennis with left hand",
+    "joiningDate": "2025-05-01",
+    "pic": "http://localhost:5000/uploads/pic-1746080964729-738703203.png",
+    "skills": "Python, React",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern"
+  },
+  {
+    "name": "dhanush np",
+    "email": "dhanush.np@gmail.com",
+    "address": "Coimbatore",
+    "phoneNo": "7676767676",
+    "funFact": "Plays table tennis with left hand",
+    "joiningDate": "2025-05-01",
+    "pic": "http://localhost:5000/uploads/pic-1746081049593-374037262.png",
+    "skills": "Python, React",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern"
+  },
+  {
+    "name": "dhanush np",
+    "email": "dhanush.np@esko.com",
+    "address": "Coimbatore",
+    "phoneNo": "7094970504",
+    "funFact": "Plays table tennis with left hand",
+    "joiningDate": "2025-05-01",
+    "pic": "http://localhost:5000/uploads/pic-1746083403990-656277666.png",
+    "skills": "Python, React",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern"
+  },
+  {
+    "name": "dhanush np",
+    "email": "dhanush.np@esko.com",
+    "address": "Coimbatore",
+    "phoneNo": "7094970504",
+    "funFact": "Plays table tennis with left hand",
+    "joiningDate": "2025-05-01",
+    "pic": "http://localhost:5000/uploads/pic-1746083641063-703975414.png",
+    "skills": "Python, React",
+    "nickname": "Newbie",
+    "rating": 3.5,
+    "role": "Intern"
   }
 ]

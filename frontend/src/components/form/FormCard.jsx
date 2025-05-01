@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { TextField, Button, Stack, Typography, FormControl, Box, keyframes, Select, MenuItem, InputLabel } from '@mui/material';
 import NavigationBar from '../navbar/NavigationBar';
+import { toast } from 'react-toastify';
 
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -15,6 +17,7 @@ const shimmerAnimation = keyframes`
 `;
 
 const FormCard = () => {
+  const navigate = useNavigate();
   const skillsOptions = [
     "React",
     "Node.js",
@@ -116,7 +119,7 @@ const FormCard = () => {
       });
 
       if (response.data.success) {
-        alert('Form submitted successfully!');
+        toast.success('Form submitted successfully!');
         setFormData({
           name: '',
           email: '',
@@ -127,13 +130,15 @@ const FormCard = () => {
           pic: null,
           skills: []
         });
+
+        navigate('/dashboard');
       } else {
         throw new Error(response.data.message);
       }
 
     } catch (error) {
       console.error('Error submitting form:', error);
-      alert(`Failed to submit form: ${error.response?.data?.message || error.message}`);
+      toast.warn(`Failed to submit form: ${error.response?.data?.message || error.message}`);
     }
   };
 
