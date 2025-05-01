@@ -41,8 +41,8 @@ const ProjectsAssignment = () => {
     const fetchData = async () => {
       try {
         const [projectsResponse, membersResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/projects/getProjects'),
-          axios.get('http://localhost:5000/api/getDetails')
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/projects/getProjects`),
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/getDetails`)
         ]);
 
         setProjects(projectsResponse.data);
@@ -95,7 +95,7 @@ const ProjectsAssignment = () => {
       try {
         const assignedEmails = selectedMembers.map(member => member.email);
 
-        const response = await axios.post('http://localhost:5000/api/projects/updateAssignments', {
+        const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/projects/updateAssignments`, {
           projectName: selectedProject.projectName,
           assignedEmails: assignedEmails
         });

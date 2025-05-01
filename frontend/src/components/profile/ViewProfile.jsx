@@ -49,7 +49,7 @@ const ViewProfile = () => {
     useEffect(() => {
         const fetchProjects = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/projects/getProjects');
+                const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/projects/getProjects`);
                 console.log('Fetched Projects:', response.data);
                 const allProjects = response.data;
                 // Filter projects where this profile's email is in assignedTo array
@@ -99,7 +99,7 @@ const ViewProfile = () => {
         if (window.confirm('Are you sure you want to delete this intern?')) {
             try {
                 console.log('Deleting intern with ID:', id);
-                const response = await axios.delete(`http://localhost:5000/api/profiles/deleteProfile/${id}`);
+                const response = await axios.delete(`${import.meta.env.VITE_API_BASE_URL}/api/profiles/deleteProfile/${id}`);
                 
                 if (response.data.success) {
                     toast.success('🗑️ Intern deleted successfully', {
@@ -139,7 +139,7 @@ const ViewProfile = () => {
     // Add this function to handle profile updates
     const handleProfileUpdate = async () => {
         try {
-            const response = await axios.put('http://localhost:5000/api/profiles/updateProfile', editedProfile);
+            const response = await axios.put(`${import.meta.env.VITE_API_BASE_URL}/api/profiles/updateProfile`, editedProfile);
             
             if (response.data.success) {
                 // Update local profile data

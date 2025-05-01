@@ -98,7 +98,7 @@ const ProjectForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/projects/postProjects', {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/projects/postProjects`, {
         ...formData,
         createdAt: new Date().toISOString()
       });

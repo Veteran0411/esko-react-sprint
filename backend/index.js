@@ -11,6 +11,8 @@ import profileRoutes from "./routes/profileRoutes.js";
 
 const app = express();
 
+
+
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -35,7 +37,15 @@ const __dirname = path.dirname(__filename); //directory name of the current exec
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));
 
 // Start the server
-const PORT = 5000;
+const frontendPath = path.join(__dirname, 'client');
+app.use(express.static(frontendPath));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'index.html'));
+});
+
+// Dynamic port (important for Render)
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

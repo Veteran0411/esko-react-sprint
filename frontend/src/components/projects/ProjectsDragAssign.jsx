@@ -46,8 +46,8 @@ const ProjectsDragAssign = () => {
     const fetchData = async () => {
       try {
         const [projectsResponse, membersResponse] = await Promise.all([
-          axios.get('http://localhost:5000/api/projects/getProjects'),
-          axios.get('http://localhost:5000/api/getDetails')
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/projects/getProjects`),
+          axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/getDetails`)
         ]);
 
         // Filter out completed and already assigned projects
@@ -140,7 +140,7 @@ const ProjectsDragAssign = () => {
 
         // Make the API call
         for (const assignment of projectAssignments) {
-          await axios.post('http://localhost:5000/api/projects/updateAssignments', {
+          await axios.post(`${import.meta.env.VITE_API_BASE_URL}/projects/updateAssignments`, {
             projectName: assignment.projectName,
             assignedEmails: assignment.assignedEmails
           });
@@ -148,7 +148,7 @@ const ProjectsDragAssign = () => {
 
         // Clear assignments and refresh projects list
         setAssignments([]);
-        const response = await axios.get('http://localhost:5000/api/projects/getProjects');
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/projects/getProjects`);
         const updatedProjects = response.data.filter(p => 
           !p.isAssigned && p.status !== 'completed'
         );

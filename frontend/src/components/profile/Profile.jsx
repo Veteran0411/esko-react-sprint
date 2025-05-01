@@ -23,7 +23,7 @@ const Profile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/getDetails')
+    axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/getDetails`)
       .then((res) => {
         setProfiles(res.data);
         console.log('Profiles fetched:', res.data);

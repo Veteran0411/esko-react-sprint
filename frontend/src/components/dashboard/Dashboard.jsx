@@ -29,7 +29,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/getDetails');
+        const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/getDetails`);
         setTeamData(response.data);
         setLoading(false);
       } catch (err) {

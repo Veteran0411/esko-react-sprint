@@ -31,7 +31,7 @@ const Login = () => {
         ? { username: formData.username, password: formData.password }
         : { email: formData.email, password: formData.password };
 
-      const response = await axios.post(`http://localhost:5000${endpoint}`, payload);
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}${endpoint}`, payload);
 
       if (response.data.success) {
         localStorage.setItem('token', response.data.token);

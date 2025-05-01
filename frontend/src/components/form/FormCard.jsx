@@ -112,7 +112,7 @@ const FormCard = () => {
       data.append('pic', formData.pic);
       data.append('skills', formData.skills.join(', '));
 
-      const response = await axios.post('http://localhost:5000/api/postDetails', data, {
+      const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/postDetails`, data, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
