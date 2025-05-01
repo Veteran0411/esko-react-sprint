@@ -9,6 +9,9 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Get base URL from environment variables
+const BASE_URL = process.env.BASE_URL || 'http://localhost:5000';
+
 // Configure multer storage
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -45,7 +48,7 @@ router.post('/', upload.single('pic'), async (req, res) => {
       phoneNo: req.body.phoneNo,
       funFact: req.body.funFact,
       joiningDate: req.body.joiningDate,
-      pic: req.file ? `http://localhost:5000/uploads/${req.file.filename}` : "http://localhost:5000/uploads/default.jpg",
+      pic: req.file ? `${BASE_URL}/uploads/${req.file.filename}` : `${BASE_URL}/uploads/default.jpg`,
       skills: req.body.skills || "React, Node.js",
       nickname: "Newbie",
       rating: 3.5,
